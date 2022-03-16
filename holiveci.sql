@@ -45,19 +45,6 @@ VALUES
 	('XI Aisén'),
 	('XII Magallanes & Antártica');
 
-CREATE TABLE IF NOT EXISTS COMMUNITIES(
-    community_id INT GENERATED ALWAYS AS IDENTITY,
-    community_name varchar(120),
-	commune_id int,
-    user_id int,
-    primary key(community_id),
-    constraint fk_user
-		foreign key (user_id)
-			references users(user_id),
-	constraint fk_commune
-		foreign key (commune_id)
-			references communes(commune_id)
-);
 
 CREATE TABLE COMMUNES(
   commune_id int GENERATED ALWAYS AS IDENTITY,
@@ -416,7 +403,19 @@ VALUES
 	('Timaukel',15),
 	('Torres del Paine',15);
 
-
+CREATE TABLE IF NOT EXISTS COMMUNITIES(
+    community_id INT GENERATED ALWAYS AS IDENTITY,
+    community_name varchar(120),
+	commune_id int,
+    user_id int,
+    primary key(community_id),
+    constraint fk_user
+		foreign key (user_id)
+			references users(user_id),
+	constraint fk_commune
+		foreign key (commune_id)
+			references communes(commune_id)
+);
 
 
 
@@ -443,16 +442,6 @@ CREATE TABLE IF NOT EXISTS PROPERTIES(
 			references users(user_id)
 )
 
-CREATE TABLE IF NOT EXISTS GGCCS(
-    ggcc_id int GENERATED ALWAYS AS IDENTITY,
-    ggcc_date DATE NOT NULL DEFAULT CURRENT_DATE,
-    property_id int,
-    PRIMARY KEY (ggcc_id),
-    constraint fk_property
-		foreign key(property_id)
-			references properties(property_id)
-)
-
 CREATE TABLE IF NOT EXISTS FLOORS(
 	floor_id int GENERATED ALWAYS AS IDENTITY,
 	tower_id int,
@@ -462,3 +451,18 @@ CREATE TABLE IF NOT EXISTS FLOORS(
 		FOREIGN KEY(tower_id)
 			REFERENCES towers
 )
+
+CREATE TABLE IF NOT EXISTS GGCCS(
+    ggcc_id int GENERATED ALWAYS AS IDENTITY,
+    ggcc_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    property_id int,
+    PRIMARY KEY (ggcc_id),
+    constraint fk_property
+		foreign key(property_id)
+			references properties(property_id)
+);
+
+INSERT INTO ROLES (role_name)
+VALUES ('superadmin'),
+	   ('administrador'),
+	   ('propietario');
