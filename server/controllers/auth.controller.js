@@ -1,4 +1,5 @@
 
+const { createUser } = require("../models/Auth");
 const { generateToken } = require("../utils/verifyToken");
 
 const signin = (req, res) => {
@@ -18,9 +19,11 @@ const signin = (req, res) => {
     }
 }
 
-const signup = (req, res) => {
+const signup = async (req, res) => {
     try {
-        res.send("signup");
+        const newUser = await createUser(req.body);
+        res.status(201).send(newUser);
+
     } catch (error) {
         res.send(error.message);
     }
