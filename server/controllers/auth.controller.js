@@ -1,17 +1,29 @@
 
-const { createUser } = require("../models/Auth");
+const { createUser, getUserByEmail } = require("../models/Auth");
 const { generateToken } = require("../utils/verifyToken");
 
-const signin = (req, res) => {
+const signin = async (req, res) => {
     try {
-        const user = {
-            username: 'Joe Smith',
-            email: 'test@gmail.com'
+        const { email, password } = req.body;
+
+        const loginUser = await getUserByEmail(email);
+
+        if (loginUser) {
+            if (loginUser.user_email == email && loginUser.user_password == password) {
+                res.status(200).send({
+                    email,
+                    token: generateToken(loginUser)
+                })
+            } else {
+                res.status(401).send(`Email o contraseña incorrecta`);
+            }
+        } else {
+            res.status(401).send(`No existe usuario con el email ${email}`);
         }
 
-        res.status(200).send({
-            token: generateToken(user)
-        });
+        // res.status(200).send({
+        //     token: generateToken(user)
+        // });
 
 
     } catch (error) {

@@ -21,6 +21,23 @@ const createUser = async (user) => {
     }
 }
 
+const getUserByEmail = async (email) => {
+    const connection = await connecting();
+    try {
+        const query = `SELECT * from users
+                       WHERE user_email = $1`;
+        const values = [email];
+        const result = await connection.query(query, values);
+        return result.rows[0] ? result.rows[0] : null;
+
+    } catch (error) {
+        return error.message;
+    } finally {
+        connection.release();
+    }
+}
+
 module.exports = {
-    createUser
+    createUser,
+    getUserByEmail
 }
