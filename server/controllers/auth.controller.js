@@ -11,6 +11,7 @@ const signin = async (req, res) => {
         if (loginUser) {
             if (loginUser.user_email == email && loginUser.user_password == password) {
                 res.status(200).send({
+                    user_id: loginUser.user_id,
                     email,
                     token: generateToken(loginUser)
                 })
@@ -20,11 +21,6 @@ const signin = async (req, res) => {
         } else {
             res.status(401).send(`No existe usuario con el email ${email}`);
         }
-
-        // res.status(200).send({
-        //     token: generateToken(user)
-        // });
-
 
     } catch (error) {
         res.status(500).send(error.message);
