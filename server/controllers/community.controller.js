@@ -1,4 +1,4 @@
-const { createCommunity } = require("../models/Community");
+const { createCommunity, newTower } = require("../models/Community");
 
 
 const create = async (req, res) => {
@@ -11,7 +11,16 @@ const create = async (req, res) => {
     }
 }
 
+const createTower = async (req, res) => {
+    try {
+        const towerNew = await newTower(req.body);
+        res.status(201).send(towerNew);
+    } catch (error) {
+        res.status(500).send({ msg: error.message })
+    }
+}
 
 module.exports = {
-    create
+    create,
+    createTower
 }

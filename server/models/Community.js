@@ -12,12 +12,32 @@ const createCommunity = async (community) => {
         const result = await connection.query(query, values);
         return result.rows[0];
     } catch (error) {
+        return error.message;
+    } finally {
+        connection.release();
+    }
+}
 
+const newTower = async (tower) => {
+    const connection = await connecting();
+
+    try {
+        const query = `INSERT INTO towers (tower_name, community_id)
+                       VALUES ($1,$2)
+                       RETURNING *`;
+
+        const values = [tower.name, tower.community_id];
+        const result = await connection.query(query, values);
+        return result.rows[0];
+
+    } catch (error) {
+        return error.message;
     } finally {
         connection.release();
     }
 }
 
 module.exports = {
-    createCommunity
+    createCommunity,
+    newTower
 }
